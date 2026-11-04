@@ -1,0 +1,40 @@
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      @if (publicacion.autor.imagenPerfil) {
+        <img [src]="publicacion.autor.imagenPerfil" alt="Autor" class="rounded-circle"
+             style="width: 42px; height: 42px; object-fit: cover;">
+      } @else {
+        <i class="bi bi-person-circle" style="font-size: 42px; line-height: 1; color: var(--color-primario);"></i>
+      }
+      <div>
+        <strong>&#64;{{ publicacion.autor.nombreUsuario }}</strong>
+        <div class="text-muted small">{{ publicacion.createdAt | date: 'dd/MM/yyyy HH:mm' }}</div>
+      </div>
+    </div>
+
+    <h5>{{ publicacion.titulo }}</h5>
+    <p>{{ publicacion.mensaje }}</p>
+  </div>
+
+  @if (publicacion.imagen) {
+    <img [src]="publicacion.imagen" alt="Imagen de la publicación" class="w-100"
+         style="max-height: 1250px; object-fit: cover;">
+  }
+
+  <div class="card-body d-flex align-items-center gap-2">
+    <button class="btn btn-sm rounded-pill"
+            [class.btn-primary]="yaDioMeGusta"
+            [class.btn-outline-primary]="!yaDioMeGusta"
+            (click)="meGusta.emit(publicacion)">
+      <i class="bi" [class.bi-heart-fill]="yaDioMeGusta" [class.bi-heart]="!yaDioMeGusta"></i>
+      {{ publicacion.meGusta.length }}
+    </button>
+
+    @if (puedeEliminar) {
+      <button class="btn btn-sm btn-outline-danger rounded-pill ms-auto" (click)="eliminar.emit(publicacion)">
+        <i class="bi bi-trash"></i> Eliminar
+      </button>
+    }
+  </div>
+</div>

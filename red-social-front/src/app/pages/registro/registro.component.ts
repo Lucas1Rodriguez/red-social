@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Va
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
+import { max } from 'rxjs';
+import { maxLength } from '@angular/forms/signals';
 
 function contraseniasIguales(group: AbstractControl): ValidationErrors | null {
   const a = group.get('contrasenia')?.value;
@@ -28,10 +30,10 @@ export class RegistroComponent {
 
   form = this.fb.group(
     {
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
+      nombre: ['', Validators.required, Validators.maxLength(10)],
+      apellido: ['', Validators.required, Validators.maxLength(10)],
       correo: ['', [Validators.required, Validators.email]],
-      nombreUsuario: ['', Validators.required],
+      nombreUsuario: ['', Validators.required, Validators.maxLength(20)],
       contrasenia: ['', [
         Validators.required,
         Validators.minLength(8),
@@ -68,7 +70,7 @@ export class RegistroComponent {
       return;
     }
 
-    if (this.preview) URL.revokeObjectURL(this.preview); // libera la anterior
+    if (this.preview) URL.revokeObjectURL(this.preview);
     this.imagen = archivo;
     this.preview = archivo ? URL.createObjectURL(archivo) : null;
   }

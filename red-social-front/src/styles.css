@@ -1,13 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
 :root {
-  --color-primario: #f28c38;
-  --color-primario-oscuro: #d9741f;
+  --color-primario: #21a3ee;
+  --color-primario-oscuro: #1031c0;
   --color-fondo: #fff6ec;
   --color-texto: #3d2c1e;
   --color-acento: #7bc4a4;
-
-  /* Pisamos las variables de Bootstrap */
   --bs-primary: var(--color-primario);
   --bs-primary-rgb: 242, 140, 56;
   --bs-body-font-family: 'Nunito', system-ui, sans-serif;
@@ -40,8 +38,8 @@ body {
 }
 
 .form-control {
-  border-radius: 0.75rem;
-  border: 1.5px solid #ecd9c4;
+  border-radius: 0.5rem;
+  border: 2.5px solid #fce7d0;
 }
 
 .form-control:focus {

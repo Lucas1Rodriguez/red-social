@@ -3,13 +3,13 @@
 <div class="container py-4">
   @if (usuario) {
     <div class="card shadow overflow-hidden mb-4">
-      <div style="height: 140px; background: linear-gradient(120deg, var(--color-primario), #f7b267);"></div>
+      <div style="height: 140px; background: linear-gradient(120deg, var(--color-primario), #d11d1d);"></div>
 
       <div class="card-body pt-0 px-4 pb-4">
         <div class="d-flex flex-column flex-md-row align-items-md-end gap-3" style="margin-top: -70px;">
           @if (usuario.imagenPerfil) {
             <img [src]="usuario.imagenPerfil" alt="Foto de perfil" class="rounded-circle bg-white"
-                 style="width: 140px; height: 140px; object-fit: cover; border: 5px solid #fff;">
+                 style="width: 140px; height: 140px; object-fit: cover; border: 5px solid #57bceb;">
           } @else {
             <i class="bi bi-person-circle bg-white rounded-circle"
                style="font-size: 140px; line-height: 1; color: var(--color-primario);"></i>
@@ -27,7 +27,7 @@
 
     <div class="row g-4">
       <div class="col-md-4">
-        <div class="card h-100">
+        <div class="card sticky-top" style="top: 1rem;">
           <div class="card-body">
             <h5 class="mb-3">Sobre mí</h5>
             <p class="mb-2"><i class="bi bi-envelope me-2"></i>{{ usuario.correo }}</p>
@@ -43,12 +43,24 @@
       </div>
 
       <div class="col-md-8">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="mb-3">Mis últimas publicaciones</h5>
-            <p class="text-muted mb-0">Acá van a aparecer tus 3 últimas publicaciones (Sprint 2).</p>
+        <h5 class="mb-3">Mis últimas publicaciones</h5>
+
+        @if (cargando()) {
+          <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+        } @else if (items().length === 0) {
+          <div class="card">
+            <div class="card-body text-center text-muted">Todavía no publicaste nada.</div>
           </div>
-        </div>
+        } @else {
+          @for (pub of items(); track pub._id) {
+            <app-publicacion-card
+              [publicacion]="pub"
+              [usuarioId]="usuario._id"
+              [esAdmin]="usuario.perfil === 'administrador'"
+              (meGusta)="alternarMeGusta($event)"
+              (eliminar)="eliminar($event)" />
+          }
+        }
       </div>
     </div>
   } @else {

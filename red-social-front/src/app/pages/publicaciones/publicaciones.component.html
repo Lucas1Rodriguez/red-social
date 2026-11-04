@@ -1,5 +1,63 @@
 <app-navbar />
-<div class="container py-4">
-  <h2>Publicaciones</h2>
-  <p class="text-muted">Acá van a aparecer las publicaciones (Sprint 2).</p>
+
+<div class="container py-4" style="max-width: 720px;">
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="mb-3">¿Qué hizo tu mascota hoy?</h5>
+      <form [formGroup]="form" (ngSubmit)="publicar()" novalidate>
+        <div class="mb-2">
+          <input class="form-control" placeholder="Título" formControlName="titulo"
+                 [class.is-invalid]="form.get('titulo')?.invalid && form.get('titulo')?.touched">
+          <div class="invalid-feedback">El título es obligatorio (máx. 100 caracteres).</div>
+        </div>
+        <div class="mb-2">
+          <textarea class="form-control" rows="3" placeholder="Contá la historia..." formControlName="mensaje"
+                    [class.is-invalid]="form.get('mensaje')?.invalid && form.get('mensaje')?.touched"></textarea>
+          <div class="invalid-feedback">El mensaje es obligatorio (máx. 1000 caracteres).</div>
+        </div>
+        <div class="mb-3">
+          <input #archivo type="file" class="form-control" accept="image/jpeg,image/png,image/webp"
+                 (change)="onArchivo($event)">
+        </div>
+        <button class="btn btn-primary" [disabled]="enviando()">
+          {{ enviando() ? 'Publicando...' : 'Publicar' }}
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Publicaciones</h4>
+    <select class="form-select w-auto" [value]="orden()" (change)="cambiarOrden($any($event.target).value)">
+      <option value="fecha">Más recientes</option>
+      <option value="meGusta">Más me gusta</option>
+    </select>
+  </div>
+
+  @if (cargando()) {
+    <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+  } @else if (items().length === 0) {
+    <p class="text-center text-muted py-4">Todavía no hay publicaciones. ¡Sé el primero!</p>
+  } @else {
+    @for (pub of items(); track pub._id) {
+      <app-publicacion-card
+        [publicacion]="pub"
+        [usuarioId]="usuario?._id"
+        [esAdmin]="usuario?.perfil === 'administrador'"
+        (meGusta)="alternarMeGusta($event)"
+        (eliminar)="eliminar($event)" />
+    }
+
+    <nav class="d-flex justify-content-center align-items-center gap-3 mt-3">
+      <button class="btn btn-outline-primary btn-sm rounded-pill" [disabled]="pagina() === 0"
+              (click)="irAPagina(pagina() - 1)">
+        « Anterior
+      </button>
+      <span>Página {{ pagina() + 1 }} de {{ totalPaginas() }}</span>
+      <button class="btn btn-outline-primary btn-sm rounded-pill" [disabled]="pagina() + 1 >= totalPaginas()"
+              (click)="irAPagina(pagina() + 1)">
+        Siguiente »
+      </button>
+    </nav>
+  }
 </div>
