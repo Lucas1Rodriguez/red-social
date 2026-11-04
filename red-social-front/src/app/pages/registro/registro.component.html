@@ -1,0 +1,89 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <div class="text-center mb-3">
+            <img src="logos/mascotas.png" alt="PetSocial" style="height: 70px;">
+          </div>
+          <h2 class="text-center mb-4">Crear cuenta</h2>
+
+          <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+
+            @if (preview) {
+              <div class="text-center mt-3">
+                <img [src]="preview" alt="Vista previa" class="rounded-circle border"
+                    style="width: 200px; height: 200px; object-fit: cover;">
+              </div>
+            }
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Nombre</label>
+                <input class="form-control" formControlName="nombre" [class.is-invalid]="invalido('nombre')">
+                <div class="invalid-feedback">El nombre es obligatorio.</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Apellido</label>
+                <input class="form-control" formControlName="apellido" [class.is-invalid]="invalido('apellido')">
+                <div class="invalid-feedback">El apellido es obligatorio.</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Correo</label>
+              <input type="email" class="form-control" formControlName="correo" [class.is-invalid]="invalido('correo')">
+              <div class="invalid-feedback">Ingresá un correo válido.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nombre de usuario</label>
+              <input class="form-control" formControlName="nombreUsuario" [class.is-invalid]="invalido('nombreUsuario')">
+              <div class="invalid-feedback">El nombre de usuario es obligatorio.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Contraseña</label>
+              <input type="password" class="form-control" formControlName="contrasenia" [class.is-invalid]="invalido('contrasenia')">
+              <div class="invalid-feedback">
+                Mínimo 8 caracteres, con al menos una mayúscula y un número.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Repetir contraseña</label>
+              <input type="password" class="form-control" formControlName="repetirContrasenia"
+                     [class.is-invalid]="invalido('repetirContrasenia') || (form.hasError('noCoinciden') && form.get('repetirContrasenia')?.touched)">
+              <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Fecha de nacimiento</label>
+              <input type="date" class="form-control" formControlName="fechaNacimiento" [class.is-invalid]="invalido('fechaNacimiento')">
+              <div class="invalid-feedback">La fecha de nacimiento es obligatoria.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Descripción breve</label>
+              <textarea class="form-control" rows="2" formControlName="descripcion" [class.is-invalid]="invalido('descripcion')"></textarea>
+              <div class="invalid-feedback">Máximo 200 caracteres.</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Imagen de perfil (opcional)</label>
+              <input type="file" class="form-control" accept="image/jpeg,image/png,image/webp" (change)="onArchivo($event)">
+            </div>
+
+            <button class="btn btn-primary w-100" [disabled]="enviando">
+              {{ enviando ? 'Registrando...' : 'Registrarme' }}
+            </button>
+          </form>
+
+          <p class="text-center mt-3 mb-0">
+            ¿Ya tenés cuenta? <a routerLink="/login">Iniciá sesión</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

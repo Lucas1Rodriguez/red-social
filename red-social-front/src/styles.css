@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --color-primario: #f28c38;
+  --color-primario-oscuro: #d9741f;
+  --color-fondo: #fff6ec;
+  --color-texto: #3d2c1e;
+  --color-acento: #7bc4a4;
+
+  /* Pisamos las variables de Bootstrap */
+  --bs-primary: var(--color-primario);
+  --bs-primary-rgb: 242, 140, 56;
+  --bs-body-font-family: 'Nunito', system-ui, sans-serif;
+  --bs-body-color: var(--color-texto);
+  --bs-link-color: var(--color-primario-oscuro);
+  --bs-link-hover-color: var(--color-primario);
+}
+
+body {
+  background-color: var(--color-fondo);
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--color-primario);
+  --bs-btn-border-color: var(--color-primario);
+  --bs-btn-hover-bg: var(--color-primario-oscuro);
+  --bs-btn-hover-border-color: var(--color-primario-oscuro);
+  --bs-btn-active-bg: var(--color-primario-oscuro);
+  --bs-btn-active-border-color: var(--color-primario-oscuro);
+  --bs-btn-disabled-bg: var(--color-primario);
+  --bs-btn-disabled-border-color: var(--color-primario);
+  font-weight: 700;
+  border-radius: 50rem;
+}
+
+.card {
+  border: none;
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 24px rgba(120, 70, 20, 0.12) !important;
+}
+
+.form-control {
+  border-radius: 0.75rem;
+  border: 1.5px solid #ecd9c4;
+}
+
+.form-control:focus {
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 0.2rem rgba(242, 140, 56, 0.25);
+}
+
+.form-label {
+  font-weight: 700;
+}
+
+h2, h3 {
+  font-weight: 800;
+}
+
+.navbar .nav-link.active {
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}

@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand navbar-dark px-3 shadow-sm" style="background-color: var(--color-primario);">
+  <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/publicaciones">
+    <img src="logos/mascotas.png" alt="PetSocial" style="height: 45px;">
+    PetSocial
+    </a>
+
+  <ul class="navbar-nav me-auto">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/publicaciones" routerLinkActive="active">Publicaciones</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/mi-perfil" routerLinkActive="active">Mi perfil</a>
+    </li>
+  </ul>
+
+  <div class="d-flex align-items-center gap-3">
+    @if (usuario) {
+      @if (usuario.imagenPerfil) {
+        <img [src]="usuario.imagenPerfil" alt="Foto de perfil" class="rounded-circle"
+             style="width: 36px; height: 36px; object-fit: cover;">
+      }
+      <span class="text-white">{{ usuario.nombreUsuario }}</span>
+    }
+    <button class="btn btn-light btn-sm rounded-pill fw-bold" (click)="salir()">Salir</button>
+  </div>
+</nav>

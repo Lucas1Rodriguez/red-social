@@ -1,0 +1,38 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <div class="text-center mb-3">
+                        <img src="logos/mascotas.png" alt="PetSocial" style="height: 70px;">
+                    </div>
+                    <h2 class="text-center mb-4">Iniciar sesión</h2>
+
+                    <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+                    <div class="mb-3">
+                    <label class="form-label">Correo o nombre de usuario</label>
+                    <input class="form-control" formControlName="identificador"
+                        [class.is-invalid]="invalido('identificador')">
+                    <div class="invalid-feedback">Ingresá tu correo o nombre de usuario.</div>
+                    </div>
+
+                    <div class="mb-4">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" formControlName="contrasenia"
+                        [class.is-invalid]="invalido('contrasenia')">
+                    <div class="invalid-feedback">Ingresá tu contraseña.</div>
+                    </div>
+
+                    <button class="btn btn-primary w-100" [disabled]="enviando">
+                    {{ enviando ? 'Ingresando...' : 'Ingresar' }}
+                    </button>
+                    </form>
+
+                    <p class="text-center mt-3 mb-0">
+                    ¿No tenés cuenta? <a routerLink="/registro">Registrate</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

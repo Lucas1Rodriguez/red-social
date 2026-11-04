@@ -1,0 +1,57 @@
+<app-navbar />
+
+<div class="container py-4">
+  @if (usuario) {
+    <div class="card shadow overflow-hidden mb-4">
+      <div style="height: 140px; background: linear-gradient(120deg, var(--color-primario), #f7b267);"></div>
+
+      <div class="card-body pt-0 px-4 pb-4">
+        <div class="d-flex flex-column flex-md-row align-items-md-end gap-3" style="margin-top: -70px;">
+          @if (usuario.imagenPerfil) {
+            <img [src]="usuario.imagenPerfil" alt="Foto de perfil" class="rounded-circle bg-white"
+                 style="width: 140px; height: 140px; object-fit: cover; border: 5px solid #fff;">
+          } @else {
+            <i class="bi bi-person-circle bg-white rounded-circle"
+               style="font-size: 140px; line-height: 1; color: var(--color-primario);"></i>
+          }
+
+          <div class="pb-2">
+            <h3 class="mb-0">{{ usuario.nombre }} {{ usuario.apellido }}</h3>
+            <span class="text-muted">&#64;{{ usuario.nombreUsuario }}</span>
+          </div>
+        </div>
+
+        <p class="mt-3 mb-0">{{ usuario.descripcion || 'Sin descripción' }}</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="mb-3">Sobre mí</h5>
+            <p class="mb-2"><i class="bi bi-envelope me-2"></i>{{ usuario.correo }}</p>
+            <p class="mb-2">
+              <i class="bi bi-calendar-heart me-2"></i>{{ usuario.fechaNacimiento | date: 'dd/MM/yyyy' }}
+            </p>
+            <p class="mb-0">
+              <i class="bi bi-person-badge me-2"></i>
+              <span class="badge rounded-pill text-bg-primary">{{ usuario.perfil }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="mb-3">Mis últimas publicaciones</h5>
+            <p class="text-muted mb-0">Acá van a aparecer tus 3 últimas publicaciones (Sprint 2).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <p class="text-center">No hay una sesión iniciada.</p>
+  }
+</div>

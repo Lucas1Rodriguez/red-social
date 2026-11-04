@@ -1,0 +1,13 @@
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { ModalComponent } from './shared/modal/modal.component';
+
+@Component({
+  imports: [RouterOutlet, ModalComponent],
+  selector: 'app-root',
+  styleUrl: './app.css',
+  templateUrl: './app.html',
+})
+export class App {
+  protected readonly title = signal('red-social-front');
+}
