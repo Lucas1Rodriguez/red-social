@@ -1,0 +1,184 @@
+<app-navbar />
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Usuarios</h3>
+    <button class="btn btn-primary" (click)="abrirAlta()">
+      <i class="bi bi-person-plus me-1"></i>Nuevo usuario
+    </button>
+  </div>
+
+  <div class="card shadow-sm">
+    @if (cargando()) {
+      <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+    } @else {
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Correo</th>
+              <th>Perfil</th>
+              <th>Alta</th>
+              <th>Estado</th>
+              <th class="text-end">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (u of usuarios(); track u._id) {
+              <tr appResaltar>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    @if (u.imagenPerfil) {
+                      <img [src]="u.imagenPerfil" alt="Foto" class="rounded-circle"
+                           style="width: 36px; height: 36px; object-fit: cover;">
+                    } @else {
+                      <span class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white"
+                            style="width: 36px; height: 36px; background: var(--color-primario);">
+                        {{ u.nombre | iniciales: u.apellido }}
+                      </span>
+                    }
+                    <div>
+                      <div class="fw-bold">{{ u.nombre }} {{ u.apellido }}</div>
+                      <small class="text-muted">&#64;{{ u.nombreUsuario }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td>{{ u.correo }}</td>
+                <td>
+                  <span class="badge rounded-pill" [class.text-bg-primary]="u.perfil === 'administrador'"
+                        [class.text-bg-secondary]="u.perfil !== 'administrador'">{{ u.perfil }}</span>
+                </td>
+                <td>{{ u.createdAt | date: 'dd/MM/yyyy' }}</td>
+                <td>
+                  <span class="badge rounded-pill" [class.text-bg-success]="u.activo !== false"
+                        [class.text-bg-danger]="u.activo === false">
+                    {{ u.activo === false ? 'Deshabilitado' : 'Activo' }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  @if (u._id !== yo()?._id) {
+                    <button class="btn btn-sm rounded-pill"
+                            [class.btn-outline-danger]="u.activo !== false"
+                            [class.btn-outline-success]="u.activo === false"
+                            (click)="alternarEstado(u)">
+                      {{ u.activo === false ? 'Habilitar' : 'Deshabilitar' }}
+                    </button>
+                  } @else {
+                    <small class="text-muted">Vos</small>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="6" class="text-center text-muted py-4">No hay usuarios.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>
+
+@if (creando()) {
+  <div class="modal-backdrop fade show"></div>
+  <div class="modal d-block" tabindex="-1" style="overflow-y: auto;" (click)="cerrarAlta()">
+    <div class="modal-dialog modal-dialog-centered" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Nuevo usuario</h5>
+          <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrarAlta()"></button>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="crear()" novalidate>
+          <div class="modal-body">
+            <div class="text-center mb-3">
+              <button type="button" class="btn p-0 border-0 position-relative"
+                      style="width: 100px; height: 100px;" (click)="archivo.click()" aria-label="Elegir foto">
+                @if (preview(); as foto) {
+                  <img [src]="foto" alt="Vista previa" class="rounded-circle w-100 h-100"
+                       style="object-fit: cover; border: 4px solid var(--color-primario);">
+                } @else {
+                  <span class="d-flex align-items-center justify-content-center rounded-circle w-100 h-100 bg-white"
+                        style="border: 3px dashed var(--color-primario); color: var(--color-primario);">
+                    <i class="bi bi-camera-fill fs-2"></i>
+                  </span>
+                }
+              </button>
+              <input #archivo type="file" class="d-none" accept="image/jpeg,image/png,image/webp" (change)="onArchivo($event)">
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Nombre</label>
+                <input appResaltar class="form-control" formControlName="nombre" [class.is-invalid]="invalido('nombre')">
+                <div class="invalid-feedback">El nombre es obligatorio.</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Apellido</label>
+                <input class="form-control" formControlName="apellido" [class.is-invalid]="invalido('apellido')">
+                <div class="invalid-feedback">El apellido es obligatorio.</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Correo</label>
+              <input type="email" class="form-control" formControlName="correo" [class.is-invalid]="invalido('correo')">
+              <div class="invalid-feedback">Ingresá un correo válido.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nombre de usuario</label>
+              <input class="form-control" formControlName="nombreUsuario" [class.is-invalid]="invalido('nombreUsuario')">
+              <div class="invalid-feedback">El nombre de usuario es obligatorio.</div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Contraseña</label>
+                <input type="password" class="form-control" formControlName="contrasenia" [class.is-invalid]="invalido('contrasenia')">
+                <div class="invalid-feedback">Mínimo 8 caracteres, una mayúscula y un número.</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Repetir contraseña</label>
+                <input type="password" class="form-control" formControlName="repetirContrasenia"
+                       [class.is-invalid]="invalido('repetirContrasenia') || (form.hasError('noCoinciden') && form.get('repetirContrasenia')?.touched)">
+                <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Fecha de nacimiento</label>
+              <input type="date" class="form-control" formControlName="fechaNacimiento" [class.is-invalid]="invalido('fechaNacimiento')">
+              <div class="invalid-feedback">La fecha de nacimiento es obligatoria.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Descripción breve</label>
+              <textarea class="form-control" rows="2" formControlName="descripcion" [class.is-invalid]="invalido('descripcion')"></textarea>
+              <div class="invalid-feedback">Máximo 200 caracteres.</div>
+            </div>
+
+            <div class="mb-1">
+              <label class="form-label d-block">Perfil</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="perfil-usuario" value="usuario" formControlName="perfil">
+                <label class="form-check-label" for="perfil-usuario">Usuario</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" id="perfil-admin" value="administrador" formControlName="perfil">
+                <label class="form-check-label" for="perfil-admin">Administrador</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary rounded-pill" (click)="cerrarAlta()">Cancelar</button>
+            <button class="btn btn-primary" [disabled]="guardando()">
+              {{ guardando() ? 'Creando...' : 'Crear usuario' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

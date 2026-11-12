@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, UnauthorizedException, } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsuariosService } from '../usuarios/usuarios.service';
@@ -44,6 +44,10 @@ export class AuthService {
     const ok = usuario && (await bcrypt.compare(dto.contrasenia, usuario.contrasenia));
     if (!ok) throw new UnauthorizedException('Credenciales incorrectas');
 
+    if (usuario.activo === false) {
+      throw new ForbiddenException('Tu cuenta está deshabilitada. Contactá a un administrador.');
+    }
+
     return this.respuesta(usuario);
   }
 
@@ -51,5 +55,21 @@ export class AuthService {
     const { contrasenia, ...datos } = usuario.toObject();
     const token = this.jwt.sign({ sub: datos._id, perfil: datos.perfil });
     return { token, usuario: datos };
+  }
+
+  async autorizar(id: string) {
+    const usuario = await this.usuarios.buscarPorId(id);
+    if (!usuario || usuario.activo === false) {
+      throw new UnauthorizedException('El usuario no existe o está deshabilitado');
+    }
+    return { usuario };
+  }
+
+  async refrescar(payload: { sub: string; perfil: string }) {
+    const usuario = await this.usuarios.buscarPorId(payload.sub);
+    if (!usuario || usuario.activo === false) {
+      throw new UnauthorizedException('El usuario no existe o está deshabilitado');
+    }
+    return { token: this.jwt.sign({ sub: payload.sub, perfil: payload.perfil }) };
   }
 }

@@ -50,6 +50,11 @@ export class PostsController {
     });
   }
 
+  @Get(':id')
+    obtener(@Param('id') id: string) {
+      return this.posts.obtener(id);
+  }
+
   @Delete(':id')
   @HttpCode(204)
   eliminar(@Param('id') id: string, @Req() req: any) {

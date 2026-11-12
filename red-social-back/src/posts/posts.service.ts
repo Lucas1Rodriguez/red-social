@@ -1,7 +1,7 @@
 import 'multer';
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, Types, isValidObjectId } from 'mongoose';
 import { Publicacion, PublicacionDocument } from './entities/post.entity';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
@@ -64,5 +64,15 @@ export class PostsService {
     if (!existe) throw new NotFoundException('No habías dado me gusta a esta publicación');
     const pub = await this.model.findByIdAndUpdate(id, { $pull: { meGusta: usuarioId } }, { new: true });
     return { meGusta: pub!.meGusta.length };
+  }
+
+  async obtener(id: string) {
+    if (!isValidObjectId(id)) throw new NotFoundException('La publicación no existe');
+    const pub = await this.model
+      .findOne({ _id: id, activa: true })
+      .populate('autor', 'nombreUsuario imagenPerfil')
+      .lean();
+    if (!pub) throw new NotFoundException('La publicación no existe');
+    return pub;
   }
 }

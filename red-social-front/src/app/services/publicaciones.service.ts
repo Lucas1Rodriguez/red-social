@@ -19,6 +19,21 @@ export interface ListadoPublicaciones {
   limit: number;
 }
 
+export interface Comentario {
+  _id: string;
+  mensaje: string;
+  modificado: boolean;
+  createdAt: string;
+  autor: { _id: string; nombreUsuario: string; imagenPerfil: string };
+}
+
+export interface ListadoComentarios {
+  items: Comentario[];
+  total: number;
+  offset: number;
+  limit: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class PublicacionesService {
   private http = inject(HttpClient);
@@ -47,5 +62,26 @@ export class PublicacionesService {
 
   quitarMeGusta(id: string) {
     return this.http.delete<{ meGusta: number }>(`${this.url}/${id}/me-gusta`);
+  }
+
+  obtener(id: string) {
+  return this.http.get<Publicacion>(`${this.url}/${id}`);
+}
+
+  listarComentarios(id: string, offset: number, limit: number) {
+    const params = new HttpParams().set('offset', offset).set('limit', limit);
+    return this.http.get<ListadoComentarios>(`${this.url}/${id}/comentarios`, { params });
+  }
+
+  comentar(id: string, mensaje: string) {
+    return this.http.post<Comentario>(`${this.url}/${id}/comentarios`, { mensaje });
+  }
+
+  editarComentario(id: string, comentarioId: string, mensaje: string) {
+    return this.http.put<Comentario>(`${this.url}/${id}/comentarios/${comentarioId}`, { mensaje });
+  }
+
+  eliminarComentario(id: string, comentarioId: string) {
+    return this.http.delete<void>(`${this.url}/${id}/comentarios/${comentarioId}`);
   }
 }

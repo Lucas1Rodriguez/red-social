@@ -8,18 +8,32 @@
     <li class="nav-item">
       <a class="nav-link" routerLink="/publicaciones" routerLinkActive="active">Publicaciones</a>
     </li>
+    <ng-container *appSoloAdmin>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/usuarios" routerLinkActive="active">Usuarios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/estadisticas" routerLinkActive="active">Estadísticas</a>
+      </li>
+    </ng-container>
     <li class="nav-item">
       <a class="nav-link" routerLink="/mi-perfil" routerLinkActive="active">Mi perfil</a>
     </li>
+
   </ul>
 
   <div class="d-flex align-items-center gap-3">
-    @if (usuario) {
-      @if (usuario.imagenPerfil) {
-        <img [src]="usuario.imagenPerfil" alt="Foto de perfil" class="rounded-circle"
-             style="width: 36px; height: 36px; object-fit: cover;">
+    @if (usuario(); as u) {
+      @if (u.imagenPerfil) {
+        <img [src]="u.imagenPerfil" alt="Foto de perfil" class="rounded-circle"
+            style="width: 36px; height: 36px; object-fit: cover;">
+      } @else {
+        <span class="rounded-circle bg-white d-flex align-items-center justify-content-center fw-bold"
+              style="width: 36px; height: 36px; color: var(--color-primario);">
+          {{ u.nombre | iniciales: u.apellido }}
+        </span>
       }
-      <span class="text-white">{{ usuario.nombreUsuario }}</span>
+      <span class="text-white">{{ u.nombreUsuario }}</span>
     }
     <button class="btn btn-light btn-sm rounded-pill fw-bold" (click)="salir()">Salir</button>
   </div>

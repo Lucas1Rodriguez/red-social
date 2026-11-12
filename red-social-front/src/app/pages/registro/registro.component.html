@@ -1,89 +1,117 @@
-<div class="container py-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow">
-        <div class="card-body p-4">
-          <div class="text-center mb-3">
-            <img src="logos/mascotas.png" alt="PetSocial" style="height: 70px;">
-          </div>
-          <h2 class="text-center mb-4">Crear cuenta</h2>
+<div class="container-fluid">
+  <div class="row min-vh-100">
 
-          <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+    <div class="col-lg-5 d-none d-lg-flex flex-column justify-content-center align-items-center text-center text-white p-5 position-sticky top-0"
+         style="height: 100vh; background: linear-gradient(135deg, var(--color-primario), #d11d1d);">
+      <img src="logos/mascotas.png" alt="PetSocial" style="height: 110px;" class="mb-3">
+      <h1 class="fw-bold">Unite a la manada</h1>
+      <p class="lead mb-4">Creá tu cuenta y mostrale al mundo lo increíble que es tu mascota.</p>
 
+      <ul class="list-unstyled text-start fs-5">
+        <li class="mb-2"><i class="bi bi-camera-fill me-2"></i>Compartí fotos y anécdotas</li>
+        <li class="mb-2"><i class="bi bi-heart-fill me-2"></i>Reaccioná a otras publicaciones</li>
+        <li class="mb-2"><i class="bi bi-chat-dots-fill me-2"></i>Comentá y conocé mascotas</li>
+      </ul>
+    </div>
+
+    <div class="col-lg-7 d-flex justify-content-center p-4">
+      <div class="w-100 py-lg-4" style="max-width: 760px;">
+
+        <div class="text-center mb-3 d-lg-none">
+          <img src="logos/mascotas.png" alt="PetSocial" style="height:70px;">
+        </div>
+
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <button type="button" class="btn p-0 border-0 position-relative flex-shrink-0"
+                  style="width: 156px; height: 156px;" (click)="archivo.click()"
+                  aria-label="Elegir foto de perfil">
             @if (preview) {
-              <div class="text-center mt-3">
-                <img [src]="preview" alt="Vista previa" class="rounded-circle border"
-                    style="width: 200px; height: 200px; object-fit: cover;">
-              </div>
+              <img [src]="preview" alt="Vista previa" class="rounded-circle w-100 h-100"
+                   style="object-fit: cover; border: 4px solid var(--color-primario);">
+            } @else {
+              <span class="d-flex align-items-center justify-content-center rounded-circle w-100 h-100 bg-white"
+                    style="border: 3px dashed var(--color-primario); color: var(--color-primario);">
+                <i class="bi bi-camera-fill fs-2"></i>
+              </span>
             }
+            <span class="position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center text-white"
+                  style="width: 30px; height: 30px; background: var(--color-primario);">
+              <i class="bi bi-pencil-fill small"></i>
+            </span>
+          </button>
 
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Nombre</label>
-                <input class="form-control" formControlName="nombre" [class.is-invalid]="invalido('nombre')">
-                <div class="invalid-feedback">El nombre es obligatorio.</div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Apellido</label>
-                <input class="form-control" formControlName="apellido" [class.is-invalid]="invalido('apellido')">
-                <div class="invalid-feedback">El apellido es obligatorio.</div>
-              </div>
+          <div>
+            <h2 class="mb-0">Crear cuenta</h2>
+            <p class="text-muted mb-0"> La comunidad te está esperando 🐾</p>
+          </div>
+        </div>
+
+        <input #archivo type="file" class="d-none" accept="image/jpeg,image/png,image/webp"
+               (change)="onArchivo($event)">
+
+        <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nombre</label>
+              <input class="form-control" formControlName="nombre" [class.is-invalid]="invalido('nombre')">
+              <div class="invalid-feedback">El nombre es obligatorio.</div>
             </div>
-
-            <div class="mb-3">
-              <label class="form-label">Correo</label>
-              <input type="email" class="form-control" formControlName="correo" [class.is-invalid]="invalido('correo')">
-              <div class="invalid-feedback">Ingresá un correo válido.</div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Apellido</label>
+              <input class="form-control" formControlName="apellido" [class.is-invalid]="invalido('apellido')">
+              <div class="invalid-feedback">El apellido es obligatorio.</div>
             </div>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Nombre de usuario</label>
-              <input class="form-control" formControlName="nombreUsuario" [class.is-invalid]="invalido('nombreUsuario')">
-              <div class="invalid-feedback">El nombre de usuario es obligatorio.</div>
-            </div>
+          <div class="mb-3">
+            <label class="form-label">Correo</label>
+            <input type="email" class="form-control" formControlName="correo" [class.is-invalid]="invalido('correo')">
+            <div class="invalid-feedback">Ingresá un correo válido.</div>
+          </div>
 
-            <div class="mb-3">
+          <div class="mb-3">
+            <label class="form-label">Nombre de usuario</label>
+            <input class="form-control" formControlName="nombreUsuario" [class.is-invalid]="invalido('nombreUsuario')">
+            <div class="invalid-feedback">El nombre de usuario es obligatorio.</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
               <label class="form-label">Contraseña</label>
               <input type="password" class="form-control" formControlName="contrasenia" [class.is-invalid]="invalido('contrasenia')">
-              <div class="invalid-feedback">
-                Mínimo 8 caracteres, con al menos una mayúscula y un número.
-              </div>
+              <div class="invalid-feedback">Mínimo 8 caracteres, una mayúscula y un número.</div>
             </div>
-
-            <div class="mb-3">
+            <div class="col-md-6 mb-3">
               <label class="form-label">Repetir contraseña</label>
               <input type="password" class="form-control" formControlName="repetirContrasenia"
                      [class.is-invalid]="invalido('repetirContrasenia') || (form.hasError('noCoinciden') && form.get('repetirContrasenia')?.touched)">
               <div class="invalid-feedback">Las contraseñas no coinciden.</div>
             </div>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Fecha de nacimiento</label>
-              <input type="date" class="form-control" formControlName="fechaNacimiento" [class.is-invalid]="invalido('fechaNacimiento')">
-              <div class="invalid-feedback">La fecha de nacimiento es obligatoria.</div>
-            </div>
+          <div class="mb-3">
+            <label class="form-label">Fecha de nacimiento</label>
+            <input type="date" class="form-control" formControlName="fechaNacimiento" [class.is-invalid]="invalido('fechaNacimiento')">
+            <div class="invalid-feedback">La fecha de nacimiento es obligatoria.</div>
+          </div>
 
-            <div class="mb-3">
-              <label class="form-label">Descripción breve</label>
-              <textarea class="form-control" rows="2" formControlName="descripcion" [class.is-invalid]="invalido('descripcion')"></textarea>
-              <div class="invalid-feedback">Máximo 200 caracteres.</div>
-            </div>
+          <div class="mb-4">
+            <label class="form-label">Descripción breve</label>
+            <textarea class="form-control" rows="2" formControlName="descripcion" [class.is-invalid]="invalido('descripcion')"></textarea>
+            <div class="invalid-feedback">Máximo 200 caracteres.</div>
+          </div>
 
-            <div class="mb-4">
-              <label class="form-label">Imagen de perfil (opcional)</label>
-              <input type="file" class="form-control" accept="image/jpeg,image/png,image/webp" (change)="onArchivo($event)">
-            </div>
+          <button class="btn btn-primary w-100" [disabled]="enviando">
+            {{ enviando ? 'Registrando...' : 'Registrarme' }}
+          </button>
+        </form>
 
-            <button class="btn btn-primary w-100" [disabled]="enviando">
-              {{ enviando ? 'Registrando...' : 'Registrarme' }}
-            </button>
-          </form>
-
-          <p class="text-center mt-3 mb-0">
-            ¿Ya tenés cuenta? <a routerLink="/login">Iniciá sesión</a>
-          </p>
-        </div>
+        <p class="text-center mt-3 mb-0">
+          ¿Ya tenés cuenta? <a routerLink="/login">Iniciá sesión</a>
+        </p>
       </div>
     </div>
+
   </div>
 </div>

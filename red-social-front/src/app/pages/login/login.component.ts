@@ -3,11 +3,15 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
+import { UsuariosService } from '../../services/usuarios.service';
+import { SesionService } from '../../services/sesion.service';
+import { AutoEnfocarDirective } from '../../directivas/auto-enfocar.directive';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AutoEnfocarDirective],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {
@@ -15,6 +19,8 @@ export class LoginComponent {
   private auth = inject(AuthService);
   private modal = inject(ModalService);
   private router = inject(Router);
+  private usuarios = inject(UsuariosService);
+  private sesion = inject(SesionService);
 
   enviando = false;
 
@@ -39,7 +45,8 @@ export class LoginComponent {
       next: (res) => {
         this.enviando = false;
         localStorage.setItem('token', res.token);
-        localStorage.setItem('usuario', JSON.stringify(res.usuario));
+        this.usuarios.guardar(res.usuario);
+        this.sesion.iniciar();
         this.router.navigate(['/publicaciones']);
       },
       error: (err) => {

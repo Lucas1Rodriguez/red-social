@@ -1,6 +1,6 @@
 @if (modalService.modal(); as m) {
   <div class="modal-backdrop fade show"></div>
-  <div class="modal d-block" tabindex="-1" (click)="modalService.cerrar()">
+  <div class="modal d-block" tabindex="-1" (click)="m.confirmacion ? null : modalService.cerrar()">
     <div class="modal-dialog modal-dialog-centered" (click)="$event.stopPropagation()">
       <div class="modal-content">
         <div class="modal-header"
@@ -15,7 +15,12 @@
           }
         </div>
         <div class="modal-footer">
-          <button class="btn btn-primary" (click)="modalService.cerrar()">Aceptar</button>
+          @if (m.confirmacion; as c) {
+            <button class="btn btn-outline-secondary rounded-pill" (click)="modalService.cancelarConfirmacion()">{{ c.cancelar }}</button>
+            <button class="btn btn-primary" (click)="modalService.aceptarConfirmacion()">{{ c.aceptar }}</button>
+          } @else {
+            <button class="btn btn-primary" (click)="modalService.cerrar()">Aceptar</button>
+          }
         </div>
       </div>
     </div>

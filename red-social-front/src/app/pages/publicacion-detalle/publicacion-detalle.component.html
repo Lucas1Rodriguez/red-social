@@ -1,0 +1,102 @@
+<app-navbar />
+
+<div class="container py-4" style="max-width: 900px;">
+  <a routerLink="/publicaciones" class="btn btn-link px-0 mb-2">
+    <i class="bi bi-arrow-left"></i> Volver a publicaciones
+  </a>
+
+  @if (cargando()) {
+    <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+  } @else if (publicacion(); as pub) {
+    <app-publicacion-card
+      [publicacion]="pub"
+      [usuarioId]="usuario()?._id"
+      [esAdmin]="usuario()?.perfil === 'administrador'"
+      [enDetalle]="true"
+      (meGusta)="alternarMeGusta()"
+      (eliminar)="eliminar()" />
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="mb-3">Comentarios ({{ totalComentarios() }})</h5>
+
+        <div class="d-flex gap-2 mb-4">
+          <div class="flex-grow-1">
+            <textarea appAutoEnfocar class="form-control" rows="2" placeholder="Escribí un comentario..."
+                      [formControl]="comentario"
+                      [class.is-invalid]="comentario.invalid && comentario.touched"></textarea>
+            <div class="invalid-feedback">El comentario es obligatorio (máx. 500 caracteres).</div>
+          </div>
+          <button class="btn btn-primary align-self-start" (click)="comentar()" [disabled]="enviando()">
+            {{ enviando() ? 'Enviando...' : 'Comentar' }}
+          </button>
+        </div>
+
+        @for (c of comentarios(); track c._id) {
+          <div class="d-flex gap-2 mb-3">
+            @if (c.autor.imagenPerfil) {
+              <img [src]="c.autor.imagenPerfil" alt="Autor" class="rounded-circle flex-shrink-0"
+                   style="width: 38px; height: 38px; object-fit: cover;">
+            } @else {
+              <i class="bi bi-person-circle flex-shrink-0"
+                 style="font-size: 38px; line-height: 1; color: var(--color-primario);"></i>
+            }
+
+            <div class="flex-grow-1" style="min-width: 0;">
+              <div class="rounded-3 p-2 px-3" style="background-color: #f8f9fa;" appResaltar>
+                <div class="d-flex justify-content-between align-items-baseline gap-2">
+                  <strong>&#64;{{ c.autor.nombreUsuario }}</strong>
+                  <small class="text-muted">
+                    <span [title]="c.createdAt | date: 'dd/MM/yyyy HH:mm'">{{ c.createdAt | tiempoRelativo }}</span>
+                    @if (c.modificado) { <em>· editado</em> }
+                  </small>
+                </div>
+
+                @if (editandoId() === c._id) {
+                  <textarea class="form-control mt-2" rows="2" [formControl]="edicion"
+                            [class.is-invalid]="edicion.invalid && edicion.touched"></textarea>
+                  <div class="invalid-feedback">El comentario es obligatorio (máx. 500 caracteres).</div>
+                  <div class="d-flex gap-2 mt-2">
+                    <button class="btn btn-primary btn-sm" (click)="guardarEdicion(c)" [disabled]="guardandoEdicion()">
+                      {{ guardandoEdicion() ? 'Guardando...' : 'Guardar' }}
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm rounded-pill" (click)="cancelarEdicion()">Cancelar</button>
+                  </div>
+                } @else {
+                  <div style="white-space: pre-wrap; overflow-wrap: anywhere;">{{ c.mensaje }}</div>
+                }
+              </div>
+
+              @if (editandoId() !== c._id) {
+                <div class="ms-2">
+                  @if (esMio(c)) {
+                    <button class="btn btn-link btn-sm p-0 me-2" (click)="empezarEdicion(c)">Editar</button>
+                  }
+                  @if (puedeEliminarComentario(c)) {
+                    <button class="btn btn-link btn-sm p-0 text-danger" (click)="eliminarComentario(c)">Eliminar</button>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        @if (comentarios().length === 0 && !cargandoComentarios()) {
+          <p class="text-center text-muted mb-0">Todavía no hay comentarios. ¡Sé el primero!</p>
+        }
+
+        @if (cargandoComentarios()) {
+          <div class="text-center py-2"><div class="spinner-border spinner-border-sm text-primary"></div></div>
+        }
+
+        @if (hayMas() && !cargandoComentarios()) {
+          <div class="text-center">
+            <button class="btn btn-outline-primary rounded-pill" (click)="cargarComentarios()">
+              Cargar más comentarios
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

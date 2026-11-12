@@ -10,11 +10,14 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  Req,
+  UseGuards
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthService } from './auth.service';
 import { RegistroDto } from './dto/registro.dto';
 import { LoginDto } from './dto/login.dto';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -47,4 +50,20 @@ export class AuthController {
   login(@Body() dto: LoginDto) {
     return this.auth.login(dto);
   }
+
+
+  @Post('autorizar')
+    @HttpCode(200)
+    @UseGuards(AuthGuard)
+    autorizar(@Req() req: any) {
+      return this.auth.autorizar(req.usuario.sub);
+  }
+
+  @Post('refrescar')
+    @HttpCode(200)
+    @UseGuards(AuthGuard)
+    refrescar(@Req() req: any) {
+      return this.auth.refrescar(req.usuario);
+  }
+
 }

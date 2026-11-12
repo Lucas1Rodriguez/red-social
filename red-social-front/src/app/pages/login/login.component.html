@@ -1,38 +1,51 @@
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow">
-                <div class="card-body p-4">
-                    <div class="text-center mb-3">
-                        <img src="logos/mascotas.png" alt="PetSocial" style="height: 70px;">
-                    </div>
-                    <h2 class="text-center mb-4">Iniciar sesión</h2>
+<div class="container-fluid">
+  <div class="row min-vh-100">
 
-                    <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
-                    <div class="mb-3">
-                    <label class="form-label">Correo o nombre de usuario</label>
-                    <input class="form-control" formControlName="identificador"
-                        [class.is-invalid]="invalido('identificador')">
-                    <div class="invalid-feedback">Ingresá tu correo o nombre de usuario.</div>
-                    </div>
+    <!-- Panel de bienvenida -->
+    <div class="col-lg-6 d-flex flex-column justify-content-center align-items-center text-center text-white p-5"
+         style="background: linear-gradient(135deg, var(--color-primario), #d11d1d);">
+      <img src="logos/mascotas.png" alt="PetSocial" style="height: 110px;" class="mb-3">
+      <h1 class="fw-bold">Bienvenido a PetSocial</h1>
+      <p class="lead mb-4">La red social para los que aman a sus mascotas.</p>
 
-                    <div class="mb-4">
-                    <label class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" formControlName="contrasenia"
-                        [class.is-invalid]="invalido('contrasenia')">
-                    <div class="invalid-feedback">Ingresá tu contraseña.</div>
-                    </div>
-
-                    <button class="btn btn-primary w-100" [disabled]="enviando">
-                    {{ enviando ? 'Ingresando...' : 'Ingresar' }}
-                    </button>
-                    </form>
-
-                    <p class="text-center mt-3 mb-0">
-                    ¿No tenés cuenta? <a routerLink="/registro">Registrate</a>
-                    </p>
-                </div>
-            </div>
-        </div>
+      <ul class="list-unstyled text-start fs-5">
+        <li class="mb-2"><i class="bi bi-camera-fill me-2"></i>Compartí fotos y anécdotas de tu mascota</li>
+        <li class="mb-2"><i class="bi bi-heart-fill me-2"></i>Reaccioná a las publicaciones de otros dueños</li>
+        <li class="mb-2"><i class="bi bi-chat-dots-fill me-2"></i>Comentá y conocé dueños y sus mascotas</li>
+      </ul>
     </div>
+
+    <!-- Formulario -->
+    <div class="col-lg-6 d-flex align-items-center justify-content-center p-4">
+      <div class="w-100" style="max-width: 400px;">
+        <h2 class="mb-1">Iniciá sesión</h2>
+        <p class="text-muted mb-4">Mirá las nuevas publicaciones 🐾</p>
+
+        <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+          <div class="mb-3">
+            <label class="form-label">Correo o nombre de usuario</label>
+            <input appAutoEnfocar class="form-control" formControlName="identificador"
+                   [class.is-invalid]="invalido('identificador')">
+            <div class="invalid-feedback">Ingresá tu correo o nombre de usuario.</div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control" formControlName="contrasenia"
+                   [class.is-invalid]="invalido('contrasenia')">
+            <div class="invalid-feedback">Ingresá tu contraseña.</div>
+          </div>
+
+          <button class="btn btn-primary w-100" [disabled]="enviando">
+            {{ enviando ? 'Ingresando...' : 'Ingresar' }}
+          </button>
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+          ¿Todavía no tenés cuenta? <a routerLink="/registro">Registrate</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
 </div>

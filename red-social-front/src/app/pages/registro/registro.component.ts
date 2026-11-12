@@ -3,8 +3,8 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Va
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ModalService } from '../../services/modal.service';
-import { max } from 'rxjs';
-import { maxLength } from '@angular/forms/signals';
+import { UsuariosService } from '../../services/usuarios.service';
+import { SesionService } from '../../services/sesion.service';
 
 function contraseniasIguales(group: AbstractControl): ValidationErrors | null {
   const a = group.get('contrasenia')?.value;
@@ -23,6 +23,8 @@ export class RegistroComponent {
   private auth = inject(AuthService);
   private modal = inject(ModalService);
   private router = inject(Router);
+  private usuarios = inject(UsuariosService);
+  private sesion = inject(SesionService);
 
   imagen: File | null = null;
   enviando = false;
@@ -34,11 +36,7 @@ export class RegistroComponent {
       apellido: ['', Validators.required, Validators.maxLength(10)],
       correo: ['', [Validators.required, Validators.email]],
       nombreUsuario: ['', Validators.required, Validators.maxLength(20)],
-      contrasenia: ['', [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/),
-      ]],
+      contrasenia: ['', [ Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/), ]],
       repetirContrasenia: ['', Validators.required],
       fechaNacimiento: ['', Validators.required],
       descripcion: ['', Validators.maxLength(200)],
@@ -89,7 +87,8 @@ export class RegistroComponent {
       next: (res) => {
         this.enviando = false;
         localStorage.setItem('token', res.token);
-        localStorage.setItem('usuario', JSON.stringify(res.usuario));
+        this.usuarios.guardar(res.usuario);
+        this.sesion.iniciar();
         this.modal.exito('¡Registro exitoso!', 'Tu cuenta fue creada correctamente.');
         this.router.navigate(['/publicaciones']);
       },
