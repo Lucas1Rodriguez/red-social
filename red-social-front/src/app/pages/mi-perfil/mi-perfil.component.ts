@@ -113,9 +113,9 @@ export class MiPerfilComponent implements OnInit {
     this.usuarios.actualizarPerfil(datos).subscribe({
       next: (actualizado) => {
         this.guardando.set(false);
-        this.usuarios.guardar(actualizado); // actualiza localStorage, navbar y esta pantalla
+        this.usuarios.guardar(actualizado);
         this.editando.set(false);
-        this.cargar(); // para que las tarjetas muestren la foto y el nombre nuevos
+        this.cargar();
         this.modal.exito('Perfil actualizado', 'Tus datos se guardaron correctamente.');
       },
       error: (err) => {

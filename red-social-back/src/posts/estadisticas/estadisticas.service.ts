@@ -14,7 +14,6 @@ export class EstadisticasService {
     @InjectModel(Comentario.name) private comModel: Model<ComentarioDocument>,
   ) {}
 
-  // Por defecto, los últimos 30 días. Los días se toman completos, en hora argentina (UTC-3).
   private rango(q: RangoDto) {
     const hoy = new Date().toISOString().substring(0, 10);
     const hace30 = new Date(Date.now() - 30 * 86400000).toISOString().substring(0, 10);
@@ -29,7 +28,6 @@ export class EstadisticasService {
     return this.pubModel.aggregate([
       { $match: { activa: true, createdAt: { $gte: desde, $lte: hasta } } },
       { $group: { _id: '$autor', cantidad: { $sum: 1 } } },
-      // autor quedó guardado como texto en publicaciones: $toObjectId sirve para texto y para ObjectId
       { $addFields: { usuarioId: { $toObjectId: '$_id' } } },
       { $lookup: { from: 'usuarios', localField: 'usuarioId', foreignField: '_id', as: 'u' } },
       {
@@ -48,7 +46,7 @@ export class EstadisticasService {
     const items = await this.comModel.aggregate([
       { $match: { createdAt: { $gte: desde, $lte: hasta } } },
       { $lookup: { from: this.pubModel.collection.name, localField: 'publicacion', foreignField: '_id', as: 'pub' } },
-      { $match: { 'pub.activa': true } }, // no cuentan los de publicaciones dadas de baja
+      { $match: { 'pub.activa': true } },
       {
         $group: {
           _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt', timezone: ZONA } },
@@ -70,7 +68,7 @@ export class EstadisticasService {
       { $match: { 'pub.activa': true } },
       { $project: { _id: 0, publicacion: { $arrayElemAt: ['$pub.titulo', 0] }, cantidad: 1 } },
       { $sort: { cantidad: -1 } },
-      { $limit: 10 }, // las 10 más comentadas, para que el gráfico sea legible
+      { $limit: 10 },
     ]);
   }
 }
