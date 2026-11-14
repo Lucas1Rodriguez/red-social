@@ -5,14 +5,13 @@ import { routes } from './app.routes';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { provideServiceWorker } from '@angular/service-worker';
 
-
-
 export const appConfig: ApplicationConfig = {
   providers: [
-  provideRouter(routes),
-  provideHttpClient(withInterceptors([authInterceptor])), provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          }),
-],
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
+  ],
 };

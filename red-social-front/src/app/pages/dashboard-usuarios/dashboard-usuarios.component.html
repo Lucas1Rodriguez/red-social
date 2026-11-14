@@ -110,7 +110,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label">Nombre</label>
-                <input appResaltar class="form-control" formControlName="nombre" [class.is-invalid]="invalido('nombre')">
+                <input class="form-control" formControlName="nombre" appAutoEnfocar [class.is-invalid]="invalido('nombre')">
                 <div class="invalid-feedback">El nombre es obligatorio.</div>
               </div>
               <div class="col-md-6 mb-3">
