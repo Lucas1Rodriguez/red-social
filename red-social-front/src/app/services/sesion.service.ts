@@ -23,8 +23,6 @@ export class SesionService {
     if (!token) return null;
     try {
       const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-      const recibido = Number(localStorage.getItem('token_recibido_en'));
-      if (recibido) return recibido + (payload.exp - payload.iat) * 1000;
       return payload.exp * 1000;
     } catch {
       return null;
@@ -66,7 +64,7 @@ export class SesionService {
       next: (res) => {
         localStorage.setItem('token', res.token);
         this.iniciar();
-        this.modal.exito('Sesión extendida', 'Tu sesión se extendió 15 minutos más.');
+        this.modal.exito('Sesión extendida', 'Tu sesión se extendió 1 minutos más.');
       },
     });
   }
