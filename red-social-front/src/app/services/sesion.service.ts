@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { ModalService } from './modal.service';
 import { UsuariosService } from './usuarios.service';
 
-const CINCO_MIN = 5 * 60 * 1000;
+const AVISO_ANTES = 30 * 1000;
 
 @Injectable({ providedIn: 'root' })
 export class SesionService {
@@ -35,7 +35,7 @@ export class SesionService {
     const exp = this.expiracion();
     if (!exp) return;
     const restante = exp - Date.now();
-    this.aviso = setTimeout(() => this.avisar(), Math.max(restante - CINCO_MIN, 0));
+    this.aviso = setTimeout(() => this.avisar(), Math.max(restante - AVISO_ANTES, 0));
     this.vencimiento = setTimeout(() => this.cerrarPorVencimiento(), Math.max(restante, 0));
   }
 
@@ -52,7 +52,7 @@ export class SesionService {
   }
 
   private avisar() {
-    this.modal.confirmar('Tu sesión está por vencer', 'Te quedan 5 minutos de sesión. ¿Querés extenderla?', {
+    this.modal.confirmar('Tu sesión está por vencer', 'Te quedan 30 segundos de sesión. ¿Querés extenderla?', {
       aceptar: 'Extender sesión',
       cancelar: 'No, gracias',
       onAceptar: () => this.extender(),

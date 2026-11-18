@@ -32,8 +32,8 @@ export class MiPerfilComponent implements OnInit {
   imagen: File | null = null;
 
   form = this.fb.group({
-    nombre: ['', Validators.required],
-    apellido: ['', Validators.required],
+    nombre: ['', Validators.required, Validators.maxLength(10)],
+    apellido: ['', Validators.required, Validators.maxLength(10)],
     fechaNacimiento: ['', Validators.required],
     descripcion: ['', Validators.maxLength(200)],
   });

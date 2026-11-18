@@ -34,11 +34,11 @@ export class DashboardUsuariosComponent implements OnInit {
 
   form = this.fb.group(
     {
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
+      nombre: ['', Validators.required, Validators.maxLength(10)],
+      apellido: ['', Validators.required, Validators.maxLength(10)],
       correo: ['', [Validators.required, Validators.email]],
-      nombreUsuario: ['', Validators.required],
-      contrasenia: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/)]],
+      nombreUsuario: ['', Validators.required, Validators.maxLength(20)],
+      contrasenia: ['', [ Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/), ]],
       repetirContrasenia: ['', Validators.required],
       fechaNacimiento: ['', Validators.required],
       descripcion: ['', Validators.maxLength(200)],
