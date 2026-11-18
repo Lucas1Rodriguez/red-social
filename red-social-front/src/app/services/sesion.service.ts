@@ -23,6 +23,8 @@ export class SesionService {
     if (!token) return null;
     try {
       const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      const recibido = Number(localStorage.getItem('token_recibido_en'));
+      if (recibido) return recibido + (payload.exp - payload.iat) * 1000;
       return payload.exp * 1000;
     } catch {
       return null;
@@ -52,16 +54,11 @@ export class SesionService {
   }
 
   private avisar() {
-    const seg = Math.round(AVISO_ANTES / 1000);
-    this.modal.confirmar(
-      'Tu sesión está por vencer',
-      `Te quedan ${seg} segundos de sesión. ¿Querés extenderla?`,
-      {
-        aceptar: 'Extender sesión',
-        cancelar: 'No, gracias',
-        onAceptar: () => this.extender(),
-      },
-    );
+    this.modal.confirmar('Tu sesión está por vencer', 'Te quedan 30 segundos de sesión. ¿Querés extenderla?', {
+      aceptar: 'Extender sesión',
+      cancelar: 'No, gracias',
+      onAceptar: () => this.extender(),
+    });
   }
 
   private extender() {
