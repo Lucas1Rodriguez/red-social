@@ -52,11 +52,16 @@ export class SesionService {
   }
 
   private avisar() {
-    this.modal.confirmar('Tu sesión está por vencer', 'Te quedan 30 segundos de sesión. ¿Querés extenderla?', {
-      aceptar: 'Extender sesión',
-      cancelar: 'No, gracias',
-      onAceptar: () => this.extender(),
-    });
+    const seg = Math.round(AVISO_ANTES / 1000);
+    this.modal.confirmar(
+      'Tu sesión está por vencer',
+      `Te quedan ${seg} segundos de sesión. ¿Querés extenderla?`,
+      {
+        aceptar: 'Extender sesión',
+        cancelar: 'No, gracias',
+        onAceptar: () => this.extender(),
+      },
+    );
   }
 
   private extender() {
